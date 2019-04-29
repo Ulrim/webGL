@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>canvas 2d</title>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+    </body>
+    <script>
+            const canvas = document.getElementById("canvas"); //id를 찾는다.
+            const ctx = canvas.getContext('2d'); //id의 getContext는 '2d' 이다.
+
+            let path1 = new Path2D(); // path2D()를 넣어서 도형을 생성.
+            path1.rect(10, 10, 100, 100);
+
+            let path2 = new Path2D(path1);
+            path2.moveTo(220, 60);
+            path2.arc(170, 60, 50, 0, 2 * Math.PI);
+
+            ctx.stroke(path2);
+        </script>
+</html>

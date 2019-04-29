@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>canvas color</title>
+        <script>
+            function draw() {
+                var ctx = document.getElementById('canvas').getContext('2d');
+                for (var i = 0; i < 6; i++){
+                    for(var j = 0; j < 6; j++){
+                        ctx.fillStyle = 'rgb(' + Math.floor(255-42.5*i) + ',' + Math.floor(255 -42.5 *j) + ', 0)';
+
+                        ctx.fillRect(j*25, i*25, 25, 25);
+
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body onload="draw();">
+        <canvas id="canvas"></canvas>
+    </body>
+</html>

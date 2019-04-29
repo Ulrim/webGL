@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>canvas 도형</title>
+        <script type="text/javascript">
+            function draw() {
+                var canvas = document.getElementById('canvas');
+                if (canvas.getContext) {
+                    ctx = canvas.getContext('2d');
+
+                    //ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                    //ctx.fillRect(10, 10, 100, 100);
+                    
+                    ctx.strokeStyle = 'rgb(255, 0, 0)';
+                    ctx.strokeRect(20, 20, 100, 100);
+
+                    ctx.clearRect(10, 10, 50, 50);
+
+                    ctx.beginPath();
+                    ctx.moveTo(75, 50);
+                    ctx.lineTo(100, 75);
+                    ctx.lineTo(100, 25);
+                    ctx.fill();
+
+                    var rectangle = new Path2D();
+                    rectangle.rect(10, 10, 50, 50);
+
+                    var circle = new Path2D();
+                    circle.moveTo(125, 35);
+                    circle.arc(100, 35, 25, 0, 2 * Math.PI);
+
+                    ctx.stroke(rectangle);
+                    ctx.fill(circle);
+
+                }
+            }
+        </script>
+    </head>
+    <body onload="draw();">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>

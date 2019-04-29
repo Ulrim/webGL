@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>canvas image</title>
+    </head>
+    <body>
+        <canvas id="canvas" width="500" height="500"><video id="myvideo"></video></canvas>
+    </body>
+    <script>
+        const ctx = document.getElementById('canvas').getContext('2d');
+
+        ctx.fillRect(10, 10, 300, 300);
+        
+        //const ctx2 = document.getElementById('canvas2').getContext('2d');
+
+        var img = '../image/2.jpg';
+        //img.src = '../image/2.jpg';
+
+        addToCanvas(ctx, img, 100, 100);
+
+        function addToCanvas(ctx, image, x, y) {
+            var img = new Image();
+            img.src = image;
+            window.onload = function() {
+                ctx.drawImage(img, 100, 100, x, y);
+                //ctx.drawImage(img, x, y);
+            }
+        }
+
+
+    </script>
+</html>

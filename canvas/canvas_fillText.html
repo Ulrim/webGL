@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>fillText</title>
+        <script>
+            function draw(){
+                var ctx = document.getElementById('canvas').getContext('2d');
+                ctx.font = '48px serif';
+                //ctx.textBaseline = "hanging";
+                ctx.fillText('Hello world', 10, 50);
+
+                ctx.strokeText('Hello world', 50, 100);
+
+            }
+        </script>
+        <style>
+            #canvas {
+                border: 1px solid black;
+                background-position: 50px 60px;
+            }
+        </style>
+    </head>
+    <body onload="draw();">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>
