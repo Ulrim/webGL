@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>canvas image</title>
+        <!-- position이 같은 요소들끼리 z-index 적용 (순서) -->
+        <!-- z-index: 숫자; 숫자를 변경해주면 레이아웃 순서가 바뀐다. -->
+        <style>
+            #canvas { position: absolute;
+            z-index: 1; }
+            #canvas2 { position: absolute;
+            z-index: 2; }
+            #canvas3 { position: absolute;
+            z-index: 3;}
+
+            #button { position: absolute;
+            z-index: 4;}
+        </style>
+    </head>
+    <body>
+        <!-- cnavas 요소는 나눠서 사용 가능 -->
+        <!-- canvas 기본값 300px*150px / 따로 정의 가능 -->
+        <canvas id="canvas" width="300" height="300"></canvas>
+        <canvas id="canvas2" width="300" height="300"></canvas>
+        <canvas id="canvas3" width="300" height="300"></canvas>
+        <!--button을 이용해서 사진 아웃풋-->
+        <button type="button" id="button" >button</button>
+    </body>
+    <script>
+        // canvas id 별 호출 canvas ~ canvas3
+        const ctx = document.getElementById('canvas').getContext('2d');
+        const ctx2 = document.getElementById('canvas2').getContext('2d');
+        const ctx3 = document.getElementById('canvas3').getContext('2d');
+
+        //button 호출 onclick event를 사용하기 위함임.
+        const btn = document.getElementById('button');
+
+        //사용할 이미지 정의
+        //이미지가 클 경우 사이즈를 줄이도록한다. 단, 이미지 용량은 줄어들지 않는다.
+        var img = '../image/2.jpg'; // 값을 넣는다.(파일 또는 url주소)
+
+        //이미지를 그리기 위한 사용자정의 함수
+        //drawImage(이미지 소스, width, height, x좌표, y좌표);
+        function addToCanvas(ctx, image, x, y) {
+            var img = new Image(); // 이미지 그리기 전 new Image(); 는 필수.
+            img.src = image; // 이미지 소스 값을 넣어줌.
+            //정의한 함수에서 return 값은 필수.. drawImage()는 이미지를 그려준다. (window.onload랑 짝꿍)
+            return ctx.drawImage(img, 100, 100, x, y);
+        }
+        
+        // 버튼 클릭 이벤트를 이용하여 이미지 출력
+        // Object.addEventListener("Event", 출력할 내용);
+        btn.addEventListener("click", 
+            window.onload = function() {addToCanvas(ctx, img, 100, 100)});
+
+        //canvas3에 직사각형을 그린다.
+        ctx3.fillStyle = 'rgb(0,255,0)'; // 스타일
+        ctx3.fillRect(100, 100, 50,50); // 도형
+
+        //canvas2에 직사각형을 그린다.
+        ctx2.fillStyle = 'rgb(255,0,0)';
+        ctx2.fillRect(30, 30, 100, 100);
+    </script>
+</html>
