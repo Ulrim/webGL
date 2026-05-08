@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>토하 어항 계산기</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ─── HEADER ─────────────────────────────────────────────────────────────── -->
+<header class="app-header">
+  <h1><span>🦐</span> 토하 어항 계산기</h1>
+  <div class="subtitle">민물새우(토하) 수질관리 · 환수 · 번식 추적</div>
+</header>
+
+<!-- ─── HOME PAGE ──────────────────────────────────────────────────────────── -->
+<section id="home" class="page active">
+  <div class="hero-card">
+    <h2>🌊 어항 상태를 한눈에</h2>
+    <p>수질 수치를 입력하면 토하에게 안전한지 즉시 확인할 수 있어요.<br>
+       각 계산기를 이용해 건강한 어항을 유지하세요.</p>
+  </div>
+
+  <div class="quick-grid">
+    <div class="quick-card" data-goto="water">
+      <div class="qc-icon">💧</div>
+      <div class="qc-title">수질 체크</div>
+      <div class="qc-sub">pH · 암모니아 · TDS</div>
+    </div>
+    <div class="quick-card" data-goto="change">
+      <div class="qc-icon">🔄</div>
+      <div class="qc-title">환수 계산</div>
+      <div class="qc-sub">필요 환수량 계산</div>
+    </div>
+    <div class="quick-card" data-goto="shrimp">
+      <div class="qc-icon">🦐</div>
+      <div class="qc-title">개체·먹이</div>
+      <div class="qc-sub">적정 수 · 먹이량</div>
+    </div>
+    <div class="quick-card" data-goto="breed">
+      <div class="qc-icon">🥚</div>
+      <div class="qc-title">포란 추적</div>
+      <div class="qc-sub">부화 예정일 계산</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📋</span> 토하 기본 정보</div>
+    <div class="info-row"><span class="label">학명</span><span class="value">Caridina koreana</span></div>
+    <div class="info-row"><span class="label">서식지</span><span class="value">한국 남부 청정 하천</span></div>
+    <div class="info-row"><span class="label">적정 수온</span><span class="value">17 ~ 22°C</span></div>
+    <div class="info-row"><span class="label">적정 pH</span><span class="value">6.8 ~ 7.2</span></div>
+    <div class="info-row"><span class="label">적정 TDS</span><span class="value">150 ~ 250 ppm</span></div>
+    <div class="info-row"><span class="label">포란 기간</span><span class="value">약 24 ~ 35일 (수온별)</span></div>
+    <div class="info-row"><span class="label">특징</span><span class="value">저온선호 · 수질민감</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚠️</span> 주의사항</div>
+    <ul class="tip-list">
+      <li>토하는 수온 25°C 이상에서 면역력이 급격히 저하됩니다.</li>
+      <li>암모니아·아질산염은 0이어야 합니다. 검출 시 즉시 조치하세요.</li>
+      <li>환수 시 신규 물과 어항 물의 온도 차이를 2°C 이내로 유지하세요.</li>
+      <li>포란 중에는 환수를 최소화하고 약품 사용을 피하세요.</li>
+      <li>스펀지 여과기를 권장합니다 (흡입 사고 예방).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── WATER QUALITY PAGE ─────────────────────────────────────────────────── -->
+<section id="water" class="page">
+  <div class="section-title"><span>💧</span> 수질 파라미터 체크</div>
+
+  <div id="overall-status" class="overall-status safe">
+    <span class="os-icon">🟢</span>
+    <span class="os-text">수질이 좋습니다! 토하가 건강하게 지내고 있어요.</span>
+  </div>
+
+  <!-- 수온 -->
+  <div id="param-temp" class="param-card safe">
+    <div class="param-header">
+      <span class="param-name">🌡️ 수온</span>
+      <span id="badge-temp" class="badge safe">✅ 안전</span>
+    </div>
+    <div class="form-label">
+      <span>현재 수온</span><span class="unit">°C (안전: 17~22)</span>
+    </div>
+    <div class="input-row">
+      <input type="range" id="temp-slider" min="0" max="35" step="0.5" value="20">
+      <input type="number" id="temp-num" min="0" max="35" step="0.5" value="20">
+    </div>
+    <div id="advice-temp" class="param-advice">수온이 적정 범위입니다. 토하가 가장 활발하게 활동하는 온도입니다.</div>
+  </div>
+
+  <!-- pH -->
+  <div id="param-ph" class="param-card safe">
+    <div class="param-header">
+      <span class="param-name">⚗️ pH</span>
+      <span id="badge-ph" class="badge safe">✅ 안전</span>
+    </div>
+    <div class="form-label">
+      <span>현재 pH</span><span class="unit">안전: 6.8~7.2</span>
+    </div>
+    <div class="input-row">
+      <input type="range" id="ph-slider" min="4" max="10" step="0.1" value="7.0">
+      <input type="number" id="ph-num" min="4" max="10" step="0.1" value="7.0">
+    </div>
+    <div id="advice-ph" class="param-advice">pH가 적정 범위입니다.</div>
+  </div>
+
+  <!-- 암모니아 -->
+  <div id="param-ammonia" class="param-card safe">
+    <div class="param-header">
+      <span class="param-name">⚠️ 암모니아</span>
+      <span id="badge-ammonia" class="badge safe">✅ 안전</span>
+    </div>
+    <div class="form-label">
+      <span>암모니아 농도</span><span class="unit">ppm (목표: 0)</span>
+    </div>
+    <div class="input-row">
+      <input type="range" id="ammonia-slider" min="0" max="5" step="0.05" value="0">
+      <input type="number" id="ammonia-num" min="0" max="5" step="0.05" value="0">
+    </div>
+    <div id="advice-ammonia" class="param-advice">암모니아가 검출되지 않습니다. 좋은 상태입니다.</div>
+  </div>
+
+  <!-- 아질산염 -->
+  <div id="param-nitrite" class="param-card safe">
+    <div class="param-header">
+      <span class="param-name">🔬 아질산염</span>
+      <span id="badge-nitrite" class="badge safe">✅ 안전</span>
+    </div>
+    <div class="form-label">
+      <span>아질산염 농도</span><span class="unit">ppm (목표: 0)</span>
+    </div>
+    <div class="input-row">
+      <input type="range" id="nitrite-slider" min="0" max="5" step="0.05" value="0">
+      <input type="number" id="nitrite-num" min="0" max="5" step="0.05" value="0">
+    </div>
+    <div id="advice-nitrite" class="param-advice">아질산염이 검출되지 않습니다. 여과 사이클이 완성된 상태입니다.</div>
+  </div>
+
+  <!-- 질산염 -->
+  <div id="param-nitrate" class="param-card safe">
+    <div class="param-header">
+      <span class="param-name">📊 질산염</span>
+      <span id="badge-nitrate" class="badge safe">✅ 안전</span>
+    </div>
+    <div class="form-label">
+      <span>질산염 농도</span><span class="unit">ppm (안전: 0~10)</span>
+    </div>
+    <div class="input-row">
+      <input type="range" id="nitrate-slider" min="0" max="100" step="1" value="5">
+      <input type="number" id="nitrate-num" min="0" max="100" step="1" value="5">
+    </div>
+    <div id="advice-nitrate" class="param-advice">질산염이 낮은 수준입니다. 이상적인 상태입니다.</div>
+  </div>
+
+  <!-- KH -->
+  <div id="param-kh" class="param-card safe">
+    <div class="param-header">
+      <span class="param-name">🪨 KH (탄산경도)</span>
+      <span id="badge-kh" class="badge safe">✅ 안전</span>
+    </div>
+    <div class="form-label">
+      <span>KH</span><span class="unit">dKH (안전: 2~5)</span>
+    </div>
+    <div class="input-row">
+      <input type="range" id="kh-slider" min="0" max="20" step="0.5" value="3">
+      <input type="number" id="kh-num" min="0" max="20" step="0.5" value="3">
+    </div>
+    <div id="advice-kh" class="param-advice">KH가 적정 범위입니다. pH 완충 능력이 충분합니다.</div>
+  </div>
+
+  <!-- GH -->
+  <div id="param-gh" class="param-card safe">
+    <div class="param-header">
+      <span class="param-name">💎 GH (총경도)</span>
+      <span id="badge-gh" class="badge safe">✅ 안전</span>
+    </div>
+    <div class="form-label">
+      <span>GH</span><span class="unit">dGH (안전: 4~8)</span>
+    </div>
+    <div class="input-row">
+      <input type="range" id="gh-slider" min="0" max="20" step="0.5" value="6">
+      <input type="number" id="gh-num" min="0" max="20" step="0.5" value="6">
+    </div>
+    <div id="advice-gh" class="param-advice">GH가 적정 범위입니다. 새우의 탈피와 성장에 필요한 미네랄이 충분합니다.</div>
+  </div>
+
+  <!-- TDS -->
+  <div id="param-tds" class="param-card safe">
+    <div class="param-header">
+      <span class="param-name">💧 TDS</span>
+      <span id="badge-tds" class="badge safe">✅ 안전</span>
+    </div>
+    <div class="form-label">
+      <span>TDS</span><span class="unit">ppm (안전: 150~250)</span>
+    </div>
+    <div class="input-row">
+      <input type="range" id="tds-slider" min="0" max="600" step="5" value="200">
+      <input type="number" id="tds-num" min="0" max="600" step="5" value="200">
+    </div>
+    <div id="advice-tds" class="param-advice">TDS가 적정 범위입니다.</div>
+  </div>
+</section>
+
+<!-- ─── WATER CHANGE PAGE ──────────────────────────────────────────────────── -->
+<section id="change" class="page">
+  <div class="section-title"><span>🔄</span> 환수량 계산기</div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🏠</span> 수조 정보</div>
+    <div class="form-group">
+      <div class="form-label"><span>수조 용량</span><span class="unit">L</span></div>
+      <div class="input-row">
+        <input type="range" id="wc-vol-slider" min="5" max="300" step="1" value="50">
+        <input type="number" id="wc-vol-num" min="5" max="300" step="1" value="50">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span> 질산염 수치</div>
+    <div class="form-group">
+      <div class="form-label"><span>현재 질산염</span><span class="unit">ppm</span></div>
+      <div class="input-row">
+        <input type="range" id="wc-cur-slider" min="0" max="100" step="1" value="20">
+        <input type="number" id="wc-cur-num" min="0" max="100" step="1" value="20">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="form-label"><span>목표 질산염</span><span class="unit">ppm</span></div>
+      <div class="input-row">
+        <input type="range" id="wc-target-slider" min="0" max="50" step="1" value="5">
+        <input type="number" id="wc-target-num" min="0" max="50" step="1" value="5">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">💡</span> 환수 결과</div>
+
+    <div class="wc-visual">
+      <div>
+        <div class="tank-visual">
+          <div class="tank-water" id="wc-tank-before" style="height:90%"></div>
+        </div>
+        <div class="tank-label">현재</div>
+      </div>
+      <div class="wc-arrow">→</div>
+      <div>
+        <div class="tank-visual">
+          <div class="tank-water" id="wc-tank-after" style="height:72%"></div>
+        </div>
+        <div class="tank-label">환수 후</div>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-item">
+        <span class="val" id="wc-pct">30%</span>
+        <div class="desc">환수 비율</div>
+      </div>
+      <div class="result-item">
+        <span class="val" id="wc-liters">15 L</span>
+        <div class="desc">환수량</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div id="wc-result-text" class="param-advice" style="font-size:0.82rem;line-height:1.6;color:var(--text)"></div>
+
+    <div style="margin-top:12px;padding:10px 12px;background:var(--bg);border-radius:var(--radius-sm);font-size:0.78rem">
+      <b>권장 환수 주기:</b> <span id="wc-freq">주 1회 10-15%</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📝</span> 환수 시 체크리스트</div>
+    <ul class="tip-list">
+      <li>새 물과 어항 물의 온도 차이를 2°C 이내로 맞추세요.</li>
+      <li>수돗물은 반드시 염소중화제 처리 후 사용하세요.</li>
+      <li>포란 중인 새우가 있다면 환수량을 절반으로 줄이세요.</li>
+      <li>환수 후 pH가 급변하지 않았는지 확인하세요.</li>
+      <li>물을 천천히 넣어 갑작스러운 수질 변화를 방지하세요.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── STOCKING / FEEDING PAGE ────────────────────────────────────────────── -->
+<section id="shrimp" class="page">
+  <div class="section-title"><span>🦐</span> 개체수 · 먹이 계산기</div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🏠</span> 수조 용량</div>
+    <div class="form-group">
+      <div class="form-label"><span>수조 용량</span><span class="unit">L</span></div>
+      <div class="input-row">
+        <input type="range" id="tank-vol-slider" min="5" max="300" step="1" value="50">
+        <input type="number" id="tank-vol-num" min="5" max="300" step="1" value="50">
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-item">
+        <span class="val" id="stock-comfortable">20마리</span>
+        <div class="desc">여유 있게</div>
+      </div>
+      <div class="result-item">
+        <span class="val" id="stock-recommended">30마리</span>
+        <div class="desc">권장</div>
+      </div>
+      <div class="result-item">
+        <span class="val" id="stock-max">45마리</span>
+        <div class="desc">최대 (여과 필수)</div>
+      </div>
+      <div class="result-item">
+        <span class="val" id="filter-rec">400 L/h</span>
+        <div class="desc">권장 여과 유량</div>
+      </div>
+    </div>
+
+    <div style="margin-top:10px;font-size:0.75rem;color:var(--text-muted);line-height:1.6">
+      최소 여과 유량: <b id="filter-min">250 L/h</b> &nbsp;|&nbsp;
+      스펀지 여과기를 권장합니다
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🥣</span> 먹이량 계산</div>
+    <div class="form-group">
+      <div class="form-label"><span>현재 새우 수</span><span class="unit">마리</span></div>
+      <div class="input-row">
+        <input type="range" id="shrimp-cnt-slider" min="1" max="200" step="1" value="20">
+        <input type="number" id="shrimp-cnt-num" min="1" max="500" step="1" value="20">
+      </div>
+    </div>
+
+    <div id="shrimp-icon-display" class="shrimp-count-display"></div>
+
+    <div class="result-box">
+      <div class="result-main" id="feed-amount">하루 4정</div>
+      <div class="result-sub" id="feed-times">하루 1-2회, 3시간 내 먹을 양만</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📝</span> 먹이 주의사항</div>
+    <ul class="tip-list">
+      <li>3~4시간 내 먹지 않은 먹이는 반드시 제거하세요 (수질 오염 원인).</li>
+      <li>과잉 급이는 암모니아 상승의 가장 흔한 원인입니다.</li>
+      <li>시금치, 오이, 호박 등 야채를 블랜칭(데쳐서) 주면 좋아합니다.</li>
+      <li>포란 중인 새우에게 충분한 먹이를 공급하세요.</li>
+      <li>치새우가 있을 경우 미분말 먹이나 미세 바이오필름이 중요합니다.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── BREEDING TRACKER PAGE ──────────────────────────────────────────────── -->
+<section id="breed" class="page">
+  <div class="section-title"><span>🥚</span> 포란 · 번식 추적기</div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📅</span> 포란 정보 입력</div>
+    <div class="form-group">
+      <div class="form-label"><span>포란 확인일 (알 품은 날)</span></div>
+      <input type="date" id="berried-date">
+    </div>
+    <div class="form-group" style="margin-top:14px">
+      <div class="form-label"><span>현재 수온</span><span class="unit">°C</span></div>
+      <div class="input-row">
+        <input type="range" id="breed-temp-slider" min="15" max="25" step="0.5" value="20">
+        <input type="number" id="breed-temp-num" min="15" max="25" step="0.5" value="20">
+      </div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px">
+        * 수온이 높을수록 포란 기간이 짧아집니다
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🗓️</span> 부화 예측</div>
+
+    <div class="countdown">
+      <div class="days" id="remaining-days">28</div>
+      <div class="days-label">일 남았습니다</div>
+      <div class="hatch-date" id="hatch-date-text">부화 예정일을 계산 중...</div>
+    </div>
+
+    <div style="margin: 4px 16px 0;">
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px" id="elapsed-days">0일 경과 / 총 28일</div>
+      <div class="timeline">
+        <div class="timeline-fill" id="breed-progress" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:12px">
+      <span id="breed-status" class="badge info">🥚 포란 중</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🌡️</span> 수온별 포란 기간</div>
+    <table style="width:100%;border-collapse:collapse;font-size:0.8rem">
+      <thead>
+        <tr style="background:var(--bg)">
+          <th style="padding:8px;text-align:center;border-radius:6px 0 0 0">수온</th>
+          <th style="padding:8px;text-align:center">포란 기간</th>
+          <th style="padding:8px;text-align:center;border-radius:0 6px 0 0">비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:7px;text-align:center;border-bottom:1px solid var(--bg)">17°C</td><td style="text-align:center;border-bottom:1px solid var(--bg)">약 35일</td><td style="text-align:center;border-bottom:1px solid var(--bg);color:var(--text-muted)">느린 발생</td></tr>
+        <tr><td style="padding:7px;text-align:center;border-bottom:1px solid var(--bg)">18°C</td><td style="text-align:center;border-bottom:1px solid var(--bg)">약 32일</td><td style="text-align:center;border-bottom:1px solid var(--bg);color:var(--text-muted)"></td></tr>
+        <tr style="background:#EEF8EE"><td style="padding:7px;text-align:center;border-bottom:1px solid var(--bg);font-weight:700">20°C</td><td style="text-align:center;border-bottom:1px solid var(--bg);font-weight:700">약 28일</td><td style="text-align:center;border-bottom:1px solid var(--bg);color:var(--safe)">권장</td></tr>
+        <tr><td style="padding:7px;text-align:center;border-bottom:1px solid var(--bg)">22°C</td><td style="text-align:center;border-bottom:1px solid var(--bg)">약 24일</td><td style="text-align:center;border-bottom:1px solid var(--bg);color:var(--text-muted)"></td></tr>
+        <tr><td style="padding:7px;text-align:center">24°C</td><td style="text-align:center">약 21일</td><td style="text-align:center;color:var(--warn)">주의</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🛡️</span> 포란 중 관리 요령</div>
+    <ul class="tip-list">
+      <li>포란 중에는 환수량을 평소의 절반 이하(5-10%)로 줄이세요.</li>
+      <li>약품(항생제, 구충제 등) 사용을 절대 피하세요.</li>
+      <li>급격한 수온 변화를 피하고 온도를 일정하게 유지하세요.</li>
+      <li>어미 새우가 알을 부채질하는 행동은 정상입니다.</li>
+      <li>알이 투명해지면 부화가 임박한 신호입니다.</li>
+      <li>부화 후 치새우는 크기가 매우 작아 여과기 흡입 주의!</li>
+      <li>치새우 먹이는 바이오필름(moss, 이끼)이 가장 중요합니다.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── BOTTOM TAB NAVIGATION ──────────────────────────────────────────────── -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="home">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">홈</span>
+  </button>
+  <button class="tab-btn" data-tab="water">
+    <span class="tab-icon">💧</span>
+    <span class="tab-label">수질</span>
+  </button>
+  <button class="tab-btn" data-tab="change">
+    <span class="tab-icon">🔄</span>
+    <span class="tab-label">환수</span>
+  </button>
+  <button class="tab-btn" data-tab="shrimp">
+    <span class="tab-icon">🦐</span>
+    <span class="tab-label">개체·먹이</span>
+  </button>
+  <button class="tab-btn" data-tab="breed">
+    <span class="tab-icon">🥚</span>
+    <span class="tab-label">번식</span>
+  </button>
+</nav>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
